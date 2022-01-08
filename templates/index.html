@@ -255,7 +255,7 @@
 
             <button class="button-33 butt" id ="Plot_button" onclick="plot_data()">Plot</button>
 
-            <div class="col" style="margin-top: 50px; right:500px;">
+            <div class="col" style="margin-top: 50px;">
 
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 slider" >
                     <input type="range" min="0" max="100" value="1" step="10" id="Speed"
@@ -265,16 +265,13 @@
         </div>
     </section>
 
-    </section>
-
-    <div class="row" style="margin-bottom: 70px;"></div>
     <div class="float-container">
 
         <div class= "Chart" id = "chartContainer"></div>
         <div class= "Chart" id = "chartContainer2"></div>
+        <div class="row" style="margin-bottom: 50px;"></div>
 
     </div>
-    <div class="row" style="margin-bottom: 50px;"></div>
 
 </div>
 <script type="text/javascript">
@@ -523,7 +520,9 @@ plot_data = function(){
         Button.innerText = "Plot";
         index = 0;
         dps = [];
+        dps2 = [];
         document.getElementById('chartContainer').style.display = "none";
+        document.getElementById('chartContainer2').style.display = "none";
     }
 }
 
