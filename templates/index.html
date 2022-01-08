@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Digital Filter Visualizer</title>
+    <script type="text/javascript" src="/static/d3/d3.min.js"></script>
+    <script type="text/javascript" src="/static/js/Zplane.js"></script>
+    <script type="text/javascript" src="/static/js/chart/chart.js"></script>
+    <script type="text/javascript" src="/static/js/plot.js"></script>
+    <script type="text/javascript" src="/static/js/Ztransform.js"></script>
+    <script type="text/javascript" src="/static/js/data.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.2/math.min.js"
+        integrity="sha512-X8Y5jFgsf/zxQN1X83Tdp1eHCzY52EfcYrDpbLxffRpF3Cyub7v9Jo0b5uwt1x6/h3ZnFzjL+yK12y1f7Q2zhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <link rel="stylesheet" href="/static/stylesheet.css" type="text/css" />
+</head>
+
+<body>
+<div class="container">
+    <section class="d-lg-flex " id="plots">
+        <div id="circle" class="col  m-sm-5">
+
+            <div class="row mb-4">
+                <div class="col">
+                    <button class="button-33" onclick="delete_zeros()">Clear Zeroes</button>
+                 
+                    <button class="button-33" onclick="delete_poles()">Clear Poles</button>
+               
+                    <button class="button-33" onclick="delete_all()">Clear All</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h6>Current real: <span id="current_x"></span></h6>
+                </div>
+                <div class="col">
+                    <h6>Current j: <span id="current_j"></span></h6>
+                </div>
+            </div>
+        </div>
+
+
+        <section class="daigram mt-5">
+            <div id="plot1" class="col">
+
+            </div>
+            <div id="plot2" class="col">
+
+            </div>
+            <div id="plot3" class="col">
+
+            </div>
+        </section>
+    </section>
+
+    <section id="plot_info" class=" mt-5 mb-5" >
+        <div class = "row" style="text-align: center;">
+            <h1>
+                make your Filter Configurations
+            </h1>
+        </div>
+        <div class="row" style="margin-bottom: 30px;">
+
+            <h3  >Add Pole</h3>
+
+            <div class="col output-group" >
+                <select id="pole_combobox" class="select">
+                    <option value="nonConjPole">nonConjPole</option>
+                    <option value="ConjPole">ConjPole</option>
+                </select>
+            </div>
+            <div class="col">
+                <h6 for="realPole">Real: </h6>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                <input id="pole-mag" value="0.0" style="text-align:right;width:4em;margin: 0 6px 6px 0;" type="text"
+                    />
+            </div>
+            <!-- <div class="col">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 input-group" style="float:left;">
+                    <input type="range" min="-1" max="1" value="0.0" step="0.1" id="realPole"
+                        onchange='updatePoleMag(this.value)'>
+                </div>
+            </div> -->
+            <div class="col">
+                <h6 for="imagPole">Imaginary: </h6>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                <input id="pole-angle" value="0" style="text-align:right;width:4em;margin: 0 6px 6px 0;" type="text"
+                    />
+            </div>
+            <!-- <div class="col">
+
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 input-group" style="float:left;">
+                    <input type="range" min="0" max="1" value="0" step="0.1" id="imagPole"
+                        onchange='updatePoleAngle(this.value)'>
+                </div>
+            </div> -->
+
+            <div class="col">
+                <button class="btn button-33 " onclick="add_pole()">add</button>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-bottom: 30px;">
+            <div class="">
+
+                <h3>Add Zero</h3>
+            </div>
+            <div class="col">
+                <select id="zero_combobox" class="select">
+                    <option value="nonConjZero">nonConjZero</option>
+                    <option value="ConjZero">ConjZero</option>
+                </select>
+            </div>
+            <div class="col">
+                <h6 for="realPole">Real: </h6>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                <input id="zero-mag" value="0.0" style="text-align:right;width:4em;margin: 0 6px 6px 0;" type="text"
+                    />
+            </div>
+
+            <!-- <div class="col">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 input-group" style="float:left;">
+                    <input type="range" min="-1" max="1" value="0.0" step="0.1" id="realZero"
+                        onchange='updateZeroMag(this.value)'>
+                </div>
+            </div> -->
+            <div class="col">
+                <h6 for="imagPole">Imaginary: </h6>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                <input id="zero-angle" value="0" style="text-align:right;width:4em;margin: 0 6px 6px 0;" type="text"
+                    />
+            </div>
+            <!-- <div class="col">
+
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 input-group" style="float:left;">
+                    <input type="range" min="0" max="1" value="0" step="0.1" id="imagZero"
+                        onchange='updateZeroAngle(this.value)'>
+                </div>
+            </div> -->
+
+            <div class="col">
+
+
+                <button onclick="add_zero()" class="btn button-33">add</button>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="row" style="margin-top: 20px;"></div>
+
+            <div class="col-3">
+                <h3>All Pass Filter</h3>
+            </div>
+
+            <div class="col-2">
+                <select name="allPass" id="allPass" class="form-select w-51">
+                    <option value="0.5+0.5i" selected>0.5+0.5i</option>
+                    <option value="0.2+0.5i"> 0.2+0.5i</option>
+                    <option value="-0.2+0.5i"> -0.2+0.5i</option>
+                </select>
+            </div>
+
+            <div class="col-2">
+                <button class="btn button-33" onclick="add_allPass()">add</button>
+            </div>
+            <div class="row" style="margin-bottom: 20px;"></div>
+
+        </div>
+        <div class="row " > 
+            <div class="">
+                <h3>Add Custom Filter</h3>
+            </div>
+            <div class="col">
+            </div>
+
+            <div class="col" style="margin-left:0px;">
+                <h6 for="realPole">Real: </h6>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                <input id="allPassRealValue" value="0.0" style="text-align:right;width:4em;margin: 0 6px 6px 0;"
+                    type="text" />
+            </div>
+
+            <!-- <div class="col">
+
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 input-group" style="float:left;">
+                    <input type="range" min="-1" max="1" value="0" step="0.1" id="allPassReal"
+                        onchange='updateAllFilterReal(this.value)'>
+                </div>
+            </div> -->
+
+            <div class="col">
+                <h6 for="imagPole">Imaginary: </h6>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+                <input id="allPassImagValue" value="0" style="text-align:right;width:4em;margin: 0 6px 6px 0;"
+                    type="text"/>
+            </div>
+
+            <!-- <div class="col">
+
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 input-group" style="float:left;">
+                    <input type="range" min="0" max="1" value="0" step="0.1" id="allPassImag"
+                        onchange='updateAllFilterImag(this.value)'>
+                </div>
+            </div> --> 
+
+            <div class="col">
+                <button onclick="add_custom_all_pass()" class="btn button-33">add</button>
+            </div>
+
+        <li>           
+            <label><input id = "check" type="checkbox" onclick="disable_AllPassFilters()">check the box to disable all pass filters</label>
+        </li>
+        </div>
+
+
+        <!-- <div class="row" >
+            <div style="margin-bottom: 50px;"></div>
+        <div>
+            <form method = "post" id="todo-form" >
+                <input type = "file" name = "todo" accept=".csv" id ="todo" />
+                <button class="button-33" type="submit">submit</button>
+            </form>  
+        </div>
+
+        <div style="margin-bottom: 50px;"></div>
+
+        </div> -->
+        <div class="row wrapper" style="margin-top: 50px;"></div>
+
+            <button style="width : 150px;" class="button-33" onclick="send_data()">Load your filter</button>
+
+
+        <div class="row wrapper" style="margin-top: 30px;">
+
+            <button class="button-33 butt" id ="Plot_button" onclick="plot_data()">Plot</button>
+
+            <div class="col" style="margin-top: 50px; right:500px;">
+
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 slider" >
+                    <input type="range" min="0" max="100" value="1" step="10" id="Speed"
+                    onchange="setinterval()">
+                </div>
+            </div> 
+        </div>
+    </section>
+
+    </section>
+
+    <div class="row" style="margin-bottom: 70px;"></div>
+    <div class="float-container">
+
+        <div class= "Chart" id = "chartContainer"></div>
+        <div class= "Chart" id = "chartContainer2"></div>
+
+    </div>
+    <div class="row" style="margin-bottom: 50px;"></div>
+
+</div>
+<script type="text/javascript">
+var allpass = 0;
+var time = [];
+var non_filtered_data = [];
+var filtered_data = [];
+var index = 0;
+var updateInterval = 1000;
+var speed = 1000;
+var myInterval = 0;
+var dps = [];
+var dps2 = [];
+var sliderValuePoleMag = document.getElementById("pole-mag");
+var sliderValuePoleAngle = document.getElementById("pole-angle");
+var sliderValueZeroMag = document.getElementById("zero-mag");
+var sliderValueZeroAngle = document.getElementById("zero-angle");
+var sliderValueAllPassMag = document.getElementById("allPassRealValue");
+var sliderValueAllPassAngle = document.getElementById("allPassImagValue");
+//var sliderValuePoleMagSlider = document.getElementById("realPole");
+//var sliderValuePoleAngleSlider = document.getElementById("imagPole");
+//var sliderValueZeroMagSlider = document.getElementById("realZero");
+//var sliderValueZeroAngleSlider = document.getElementById("imagZero");
+//var sliderValueAllPassMagSlider = document.getElementById("allPassReal");
+//var sliderValueAllPassAngleSlider = document.getElementById("allPassImag");
+
+//function clear(){
+    //alert("you are out of range");
+
+    //sliderValuePoleMag.value = 0;
+    //sliderValuePoleAngle.value = 0;
+    //sliderValueZeroMag.value = 0;
+    //sliderValueZeroAngle.value = 0;
+    //sliderValueAllPassMag.value = 0;
+    //sliderValueAllPassAngle.value = 0;
+    //sliderValuePoleMagSlider.value = 0;
+    //sliderValuePoleAngleSlider.value = 0;
+    //sliderValueZeroMagSlider.value = 0;
+    //sliderValueZeroAngleSlider.value = 0;
+    //sliderValueAllPassMagSlider.value = 0;
+    //sliderValueAllPassAngleSlider.value = 0;
+//}
+
+let zplane = new Zplane(350, 350);
+let ztrans = new ZTransform();
+let allPassValues = [];
+zplane.plot_axis();
+let plt = new Plot(100, 200);
+// update plot 
+let charts = plt.plot([], [], [], [], [], [], "Magnitude", "Phase", "All Pass Phase");
+const update_plots = () => {
+    plt.destroy();
+    let poles = zplane.get_poles();
+    let zeros = zplane.get_zeros();
+    let allPass = zplane.get_allPass();
+    let response = ztrans.filter(poles, zeros, allPass); //y-axis
+    let freqs = ztrans.frequencies; //x-axis
+    charts = plt.plot(freqs, response.magnitude, freqs, response.phase, [], [], "Magnitude", "Phase", "All Pass Phase");
+    update_allPass(response.allPassPhase);
+}
+const update_allPass = (allPassPhase) => {
+    let freqs = ztrans.frequencies //x-axis
+    charts.myChart3.data.labels = freqs;
+    charts.myChart3.data.datasets.forEach((dataset) => {
+        dataset.data = allPassPhase;
+    });
+    charts.myChart3.update();
+}
+
+function add_pole() {
+    var type = document.getElementById("pole_combobox").value;
+    if (type == "nonConjPole") {
+        add_real("nonConjPole");
+    }
+    else {
+        add_conj("conjPole");
+    }
+}
+
+function add_zero() {
+    var type = document.getElementById("zero_combobox").value;
+    if (type == "nonConjZero") {
+        add_real("nonConjZero");
+    }
+    else {
+        add_conj("conjZero");
+    }
+}
+
+disable_AllPassFilters = () =>{
+    if (document.getElementById('check').checked) {
+        allpass = zplane.get_allPass();
+        zplane.delete_allpass();
+    }
+    else{
+        for (var i = 0;i<allpass.length;i++){
+        zplane.add_point([allpass[i][0], allpass[i][1]], zplane.types.allPass);
+        }
+    }
+    update_plots();
+
+}
+
+function setinterval(){
+    if(document.getElementById("Speed").value == 0){
+        clearInterval(myInterval);
+        updateInterval = 1000;
+        plot();
+
+    }
+
+    else{
+        clearInterval(myInterval);
+        updateInterval = speed/(document.getElementById("Speed").value);
+        plot();
+    }
+}
+
+//function updatePoleMag(value) {
+    //sliderValuePoleMag.value = value;
+    //if (Math.sqrt(Math.pow(Number(sliderValuePoleMag.value), 2) + Math.pow(Number(Math.abs(sliderValuePoleAngle.value)), 2)) > 1) {
+        //clear();
+        //return;
+    //}
+//}
+
+//function updatePoleAngle(value) {
+    //sliderValuePoleAngle.value = value;
+    //if (Math.sqrt(Math.pow(Number(sliderValuePoleMag.value), 2) + Math.pow(Number(Math.abs(sliderValuePoleAngle.value)), 2)) > 1) {
+        //clear();
+        //return;
+    //}
+//}
+
+//function updateZeroMag(value) {
+    //sliderValueZeroMag.value = value;
+    //if (Math.sqrt(Math.pow(Number(sliderValueZeroMag.value), 2) + Math.pow(Number(Math.abs(sliderValueZeroAngle.value)), 2)) > 1) {
+        //clear();         
+    //}
+//}
+
+//function updateZeroAngle(value) {
+    //sliderValueZeroAngle.value = value;
+    //if (Math.sqrt(Math.pow(Number(sliderValueZeroMag.value), 2) + Math.pow(Number(Math.abs(sliderValueZeroAngle.value)), 2)) > 1) {
+        //clear();            
+    //}
+//}
+
+//function updateAllFilterReal(value) {
+    //sliderValueAllPassMag.value = value;
+    //if (Math.sqrt(Math.pow(Number(sliderValueAllPassMag.value), 2) + Math.pow(Number(Math.abs(sliderValueAllPassAngle.value)), 2)) > 1) {
+        //clear(); 
+    //}
+//}
+
+//function updateAllFilterImag(value) {
+    //sliderValueAllPassAngle.value = value;
+    //if (Math.sqrt(Math.pow(Number(sliderValueAllPassAngle.value), 2) + Math.pow(Number(Math.abs(sliderValueAllPassMag.value)), 2)) > 1) {
+        //clear();
+    //}
+//}
+
+zplane.function_during_drag = update_plots;
+zplane.function_during_delete = update_plots;
+const add_real = (type) => {
+    if (type == zplane.types.nonConjPole) {
+        //get value of pole
+        let real = parseFloat(document.getElementById("pole-mag").value);
+        let imaginary = parseFloat(document.getElementById("pole-angle").value);
+        zplane.add_point([real, imaginary], zplane.types.nonConjPole);
+    } else {
+        let real = parseFloat(document.getElementById("zero-mag").value);
+        let imaginary = parseFloat(document.getElementById("zero-angle").value);
+        zplane.add_point([real, imaginary], zplane.types.nonConjZero);
+    }
+    update_plots();
+}
+
+add_custom_all_pass = () => {
+    let re = parseFloat(document.getElementById("allPassRealValue").value);
+    let im = parseFloat(document.getElementById("allPassImagValue").value);
+    zplane.add_point([re, im], zplane.types.allPass);
+    update_plots();
+}
+
+const add_allPass = () => {
+    let value = document.getElementById("allPass").value;
+    value = math.complex(value);
+    zplane.add_point([value.re, value.im], zplane.types.allPass);
+    update_plots("allPass");
+}
+
+const add_conj = (type) => {
+    if (type == zplane.types.conjPole) {
+        let real = parseFloat(document.getElementById("pole-mag").value);
+        let imag = parseFloat(document.getElementById("pole-angle").value);
+        zplane.add_point([real, imag], zplane.types.conjPole);
+    } else {
+        let real = parseFloat(document.getElementById("zero-mag").value);
+        let imag = parseFloat(document.getElementById("zero-angle").value);
+        zplane.add_point([real, imag], zplane.types.conjZero);
+    }
+    update_plots();
+}
+const delete_poles = () => {
+    zplane.delete_poles();
+    update_plots();
+}
+const delete_zeros = () => {
+    zplane.delete_zeros();
+    update_plots();
+}
+const delete_all = () => {
+    zplane.delete_all();
+    update_plots();
+}
+function get_points(){
+    return zplane.get_allpoints();
+}
+
+function send_data(){
+    var js_data = JSON.stringify(get_points());
+    $.ajax({
+        url: '/plot',
+        type : 'post',
+        contentType: 'application/json',
+        dataType : 'json',
+        data : js_data
+    }).done(function(result) {
+        time = result.data_Xaxis;
+        non_filtered_data = result.non_Filtered_Data
+        filtered_data = result.Filtered_Data;
+        console.log(filtered_data);
+    }).fail(function() {
+        console.log("Request failed");
+    });
+}
+
+plot_data = function(){
+    Button = document.getElementById('Plot_button');
+    if (Button.innerText == "Plot")
+    {
+        plot();
+    }
+    else {
+        Button.innerText = "Plot";
+        index = 0;
+        dps = [];
+        document.getElementById('chartContainer').style.display = "none";
+    }
+}
+
+plot = function () {
+    document.getElementById('chartContainer').style = "height: 300px; width: 50%;";
+    document.getElementById('chartContainer2').style = "height: 300px; width: 50%;";
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+        title :{
+            text: "Filtered Data"
+        },
+        data: [{
+            type: "line",
+            dataPoints: dps //data points
+        }]
+    });
+
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        title :{
+            text: "Normal Data"
+        },
+        data: [{
+            type: "line",
+            dataPoints: dps2 //data points
+        }]
+    });
+
+    var updateChart = function (time, normalData, filteredData) {
+            index++;
+            dps.push({
+                x: time,
+                y: filteredData
+            });
+
+            dps2.push({
+                x:time,
+                y:normalData
+            });
+            //if (index>20){
+            //clearInterval(myInterval);
+    
+            //}
+    
+        if (dps.length > 20) {
+            dps.shift();
+            dps2.shift();
+        }
+    
+        chart.render();
+        chart2.render();
+    };
+    Button.innerText = "Hide";
+    //updateChart(time, filteredData);
+    myInterval = setInterval(function(){updateChart(time[index], non_filtered_data[index], filtered_data[index])}, updateInterval);
+
+}
+
+</script>
+  
+</body>
+
+</html>

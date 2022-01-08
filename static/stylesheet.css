@@ -1,0 +1,110 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+h3{
+   margin-bottom: 10px !important ;
+}
+.container{
+   
+background-color: #F2FDFF;
+width: auto;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+div {
+    margin: 0.25% 0% 0.25% 0%;
+}
+.axis path,
+.axis line {
+ color: darkgray;
+}
+
+.position{
+    right:20px;
+}
+
+.output-group {
+    right:1000px;
+    top:5px;
+}
+    
+.input-group {
+right:100px;
+top:5px;
+}
+
+ 
+ 
+  select
+   { padding: 7px 40px 7px 12px;
+    width: auto;
+    border: 1px solid #E8EAED;
+    border-radius: 5px;
+     
+    box-shadow: 0 1px 3px -2px #9098A9;
+    cursor: pointer;
+    font-family: inherit;
+    height: 35px;
+    transition: all 150ms ease;
+   }
+   input 
+   { 
+    
+   border:2px solid #198754 ;
+   border-radius: 3px;
+   transition: all .5s ;
+   color:#000; 
+   }    
+     
+   .btn2{
+       background-color: #198754;
+       color:#fff;
+   }
+   .btn2:hover{
+    color:#fff;
+   }
+   .daigram{
+    width:600px;
+    height:200px;
+   }
+     
+   .button-33 {
+    background-color: #F2FDFF;
+    box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset;
+    color: #000;
+    padding: 7px 20px;
+    text-align: center;
+    border: 0;
+    margin-left: 20px;
+    width:90px;
+   
+     
+  }
+  
+  .button-33:hover {
+    box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+    transform: scale(1.05) rotate(-1deg);
+  }
+
+.wrapper {
+    text-align: center;
+}
+
+.butt {
+    position: absolute;
+    left: 45%;
+}
+.slider{
+    position:absolute;
+    left:38%;
+}
+
+.float-container {
+    padding: 20px;
+}
+
+.Chart {
+    float: left;
+    padding: 20px;
+}  
