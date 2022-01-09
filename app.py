@@ -16,8 +16,10 @@ def home():
         
 @app.route('/plot', methods = ['GET', 'POST'])
 def digital_filter_data():
-    Xaxis_data = pd.read_csv("file1.csv").iloc[:, 0].tolist()
-    Yaxis_data = pd.read_csv("file1.csv").iloc[:, 1].tolist()
+    url = "https://raw.githubusercontent.com/MohamedMostafa23/Digital-Filter/main/Data-Nor-ECG.csv"
+    data_url = requests.get(url).content
+    Xaxis_data = pd.read_csv(io.StringIO(data_url.decode('utf-8'))).iloc[:, 0].tolist()
+    Yaxis_data = pd.read_csv(io.StringIO(data_url.decode('utf-8'))).iloc[:, 1].tolist()
     Filtered_data = []
     zeros = []
     poles = []
