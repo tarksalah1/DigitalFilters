@@ -260,6 +260,9 @@
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 slider" >
                     <input type="range" min="0" max="100" value="1" step="10" id="Speed"
                     onchange="setinterval()">
+                    <div>
+                    <label id = "sliderSpeed">Current Speed is : 1 </label>
+                    </div>
                 </div>
             </div> 
         </div>
@@ -379,6 +382,7 @@ function setinterval(){
     if(document.getElementById("Speed").value == 0){
         clearInterval(myInterval);
         updateInterval = 1000;
+        document.getElementById('sliderSpeed').innerHTML = "Current Speed is : 1"
         plot();
 
     }
@@ -386,6 +390,7 @@ function setinterval(){
     else{
         clearInterval(myInterval);
         updateInterval = speed/(document.getElementById("Speed").value);
+        document.getElementById('sliderSpeed').innerHTML = "Current Speed is : " + document.getElementById("Speed").value
         plot();
     }
 }
