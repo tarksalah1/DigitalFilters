@@ -248,7 +248,7 @@
         </div> -->
         <div class="row wrapper" style="margin-top: 50px;"></div>
 
-            <button style="width : 150px;" class="button-33" onclick="send_data()">Load your filter</button>
+            <button id ="LoadButton" style="width : 150px;" class="button-33" onclick="send_data()">Load your filter</button>
 
 
         <div class="row wrapper" style="margin-top: 30px;">
@@ -493,6 +493,15 @@ function get_points(){
 }
 
 function send_data(){
+    Button = document.getElementById('Plot_button');
+    if (Button.innerText == "Hide"){
+        Button.innerText = "Plot";
+        index = 0;
+        dps = [];
+        dps2 = [];
+        document.getElementById('chartContainer').style.display = "none";
+        document.getElementById('chartContainer2').style.display = "none";
+    }
     var js_data = JSON.stringify(get_points());
     $.ajax({
         url: '/plot',
@@ -508,6 +517,7 @@ function send_data(){
     }).fail(function() {
         console.log("Request failed");
     });
+
 }
 
 plot_data = function(){
